@@ -21,7 +21,7 @@ public class AFileExtracor implements SimultaneousProcess {
      */
     @Override
     public String prepareResultFilePath() {
-        return "F:/fenci/file/test-out.txt";
+        return "F:/线上log/scenic_back/test-out.txt";
     }
 
     /**
@@ -32,7 +32,10 @@ public class AFileExtracor implements SimultaneousProcess {
     @Override
     public List<String> prepareSrcFileListPath() {
         List<String> fileList = new ArrayList<String>();
-        fileList.add("F:/fenci/file/test.txt");
+        fileList.add("F:/线上log/scenic_back/catalina.out");
+        for(int i = 1; i <= 16; i++){
+			fileList.add("F:/线上log/scenic_back/catalina("+i+").out");
+		}
         return fileList;
     }
 

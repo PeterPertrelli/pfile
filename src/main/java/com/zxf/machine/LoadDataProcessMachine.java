@@ -1,7 +1,7 @@
 package com.zxf.machine;
 
-import com.zxf.file.FileExtracor;
-import com.zxf.process.SimultaneousProcess;
+import com.zxf.file.FileLoader;
+import com.zxf.process.LoadDataProcess;
 import com.zxf.util.TranslateUtil;
 
 import java.util.Date;
@@ -10,19 +10,18 @@ import java.util.List;
 /**
  * @author zhuxiangfei
  * @Description:
- * @date 2018/4/10
+ * @date 2018/8/22
  */
-public class ReadSimultaneousProcessMachine {
-    public static void exec(SimultaneousProcess processer) {
+public class LoadDataProcessMachine {
+    public static void exec(LoadDataProcess processer) {
         Date time= new Date();
         System.out.println("开始时间 : "+time);
         long t1 = System.currentTimeMillis();
         //1.准备文件
         List<String> srcList = processer.prepareSrcFileListPath();
-        String resultFile = processer.prepareResultFilePath();
 
         //2.提取
-        FileExtracor.read2WriteLineByLine(srcList, resultFile, processer);
+        FileLoader.loadDataLineByLine(srcList, processer);
 
         long t2 = System.currentTimeMillis();
 
