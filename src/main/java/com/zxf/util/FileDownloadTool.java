@@ -18,13 +18,6 @@ import org.apache.commons.io.FileUtils;
  */
 public class FileDownloadTool {
 
-    public static void main(String[] args) {
-
-        FileDownloadTool.download("http://www.17500.cn/getData/ssq.TXT", "F:\\study\\resource\\bfroud", "ssq.TXT");
-        System.out.println("done...");
-
-    }
-
     /**
      * 使用传统io stream 下载文件
      * @param url (官网：www.fhadmin.org)
