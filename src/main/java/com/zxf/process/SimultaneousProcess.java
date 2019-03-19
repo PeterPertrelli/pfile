@@ -10,25 +10,12 @@ import java.util.List;
  * @Description:
  * @date 2018/4/10
  */
-public interface SimultaneousProcess {
+public interface SimultaneousProcess extends Process {
     /**
      * 用于获取输出文件路径
      * @return 输出文件路径
      */
     public String prepareResultFilePath();
-
-    /**
-     * 用于后去源文件路径
-     * @return 源文件路径
-     */
-    public List<String> prepareSrcFileListPath();
-
-    /**
-     * 是否对读取到的文件内容进行输出
-     * @param line
-     * @return
-     */
-    public boolean needPrint(String line);
 
     /**
      * 对读取到的一行进行处理，然后进行打印

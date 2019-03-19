@@ -7,20 +7,7 @@ import java.util.List;
  * @Description:
  * @date 2018/8/22
  */
-public interface LoadDataProcess {
-
-    /**
-     * 源文件路径
-     * @return 源文件路径
-     */
-    public List<String> prepareSrcFileListPath();
-
-    /**
-     * 是否需要读取到的文件内容
-     * @param line
-     * @return
-     */
-    public boolean need(String line);
+public interface LoadDataProcess extends Process {
 
     /**
      * 对读取到的一行进行处理

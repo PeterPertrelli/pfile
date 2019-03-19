@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class MyFileReader {
 	
-	public static Map<String, Map<String, Object>> generateLogFiles(
+	public static Map<String, Map<String, Object>> generateSrcFiles(
 			List<String> files) throws Exception {
 
 		Map<String, Map<String, Object>> logFile = new HashMap<String, Map<String, Object>>();

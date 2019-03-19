@@ -19,7 +19,7 @@ public class FileLoader {
 
             System.out.println(">>>>>>>>>>> load     start <<<<<<<<<<<");
 
-            Map<String, Map<String, Object>> srcFile = MyFileReader.generateLogFiles(srcList);
+            Map<String, Map<String, Object>> srcFile = MyFileReader.generateSrcFiles(srcList);
 
             String temp = null;
 
