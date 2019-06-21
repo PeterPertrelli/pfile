@@ -13,7 +13,7 @@ import org.junit.Test;
 public class AppTest 
 {
     public static void main(String[] args) {
-
+                             //imit-wxc9b70af370d8f724-27913-935950.jpg[LvLogE TIME
         String line = "eUnlimit-wxc9b70af370d8f724-31154-10915581.jpg[LvLogE TIME:\"155296";
 
         String goodsId = line.substring(line.indexOf("wxc9b70af370d8f724-")+8,line.indexOf("[LvLogE TIME"));
