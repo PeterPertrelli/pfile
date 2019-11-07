@@ -14,6 +14,12 @@ import java.util.List;
  * @date 2018/4/10
  */
 public class AFileExtracor implements SimultaneousProcess {
+
+
+    public static void main(String[] args) {
+        AFileExtracor extractor = new AFileExtracor();
+        ReadSimultaneousProcessMachine.exec(extractor);
+    }
     /**
      * 用于获取输出文件路径
      *
@@ -21,7 +27,7 @@ public class AFileExtracor implements SimultaneousProcess {
      */
     @Override
     public String prepareResultFilePath() {
-        return "F:/线上log/emc-weshop-gateway/12222.txt";
+        return "F:/线上log/emc-weshop-front/1111111.txt";
     }
 
     /**
@@ -35,8 +41,13 @@ public class AFileExtracor implements SimultaneousProcess {
 //        fileList.add("F:/线上log/mec-b2b-scenic/catalina.out");
 //        fileList.add("F:/线上log/mec-b2b-scenic/catalina (1).out");
 
-        fileList.add("F:/线上log/emc-weshop-gateway/catalina (1).out");
-        fileList.add("F:/线上log/emc-weshop-gateway/catalina.out");
+        fileList.add("F:/线上log/emc-weshop-front/3catalina.out");
+        fileList.add("F:/线上log/emc-weshop-front/4catalina.out");
+        fileList.add("F:/线上log/emc-weshop-prod/prod3catalina.out");
+        fileList.add("F:/线上log/emc-weshop-prod/prod4catalina.out");
+//        fileList.add("F:/线上log/emc-weshop-client/catalina.out-2019-08-15");
+//        fileList.add("F:/线上log/emc-weshop-client/catalina (1).out-2019-08-15");
+//        fileList.add("F:/线上log/emc-weshop-gateway/catalina.out");
 
 //        fileList.add("F:/线上log/emc-weshop-client/catalina.out");
 //        fileList.add("F:/线上log/emc-weshop-client/catalina (1).out");
@@ -59,7 +70,13 @@ public class AFileExtracor implements SimultaneousProcess {
      */
     @Override
     public boolean need(String line) {
-        if(line.contains("WeixinMiniController") && line.contains("wxc9b70af370d8f724") ){
+        if(line.contains("22ec9e3052119af")
+                 || line.contains("100102860")
+//                 || line.contains("商品查询参数")
+//                 || line.contains("订单列表缓存预加载")
+//                 && line.contains("o4yzB1AAicLfk5bD2CfzQwlElzlw")
+//                 && line.contains("2598042")
+                ){
             return true;
         }else {
             return false;
@@ -99,7 +116,7 @@ public class AFileExtracor implements SimultaneousProcess {
 //imit-wxc9b70af370d8f724-27913-935950.jpg[LvLogE TIME
 
 
-
+//        line = line.substring(line.indexOf("(TicketProductCacheController"),line.indexOf("[LvLogE TIME"));
 
 
         fw.write(line + "\r\n");
@@ -111,8 +128,4 @@ public class AFileExtracor implements SimultaneousProcess {
 
     }
 
-    public static void main(String[] args) {
-        AFileExtracor extractor = new AFileExtracor();
-        ReadSimultaneousProcessMachine.exec(extractor);
-    }
 }

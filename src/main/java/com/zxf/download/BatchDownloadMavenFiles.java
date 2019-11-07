@@ -10,27 +10,36 @@ import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * @author zhuxiangfei
  * @Description:
- * @date 2019/6/21
+ * @date 2019/7/9
  */
-public class DownloadMavenFiles {
+public class BatchDownloadMavenFiles {
+
 
     public static void main(String[] args){
 
+        //    创建一个线程池
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         long start = System.currentTimeMillis();
 
-        DownloadMavenFiles d = new DownloadMavenFiles();
+        BatchDownloadMavenFiles d = new BatchDownloadMavenFiles();
         d.download("http://192.168.0.101:8081/nexus/content/groups/public/org/mybatis/generator/mybatis-generator-maven-plugin/",
-                "E:\\develop\\maven-repository\\org\\mybatis\\generator\\mybatis-generator-maven-plugin\\");
+                "E:\\develop\\maven-repository\\org\\mybatis\\generator\\mybatis-generator-maven-plugin\\", executorService);
+
+        executorService.shutdown();
+
         long end = System.currentTimeMillis();
 
         d.println(String.format("######     cost : %s ms", (end-start)));
+
     }
 
     /**
@@ -38,27 +47,35 @@ public class DownloadMavenFiles {
      * @param url     http://192.168.0.101:8081/nexus/content/groups/public/com/lvmama/emc/order/core/
      * @param path    E:\develop\maven-repository\com\lvmama\emc\order\core\   必须已存在
      */
-    public void download(String url, String path){
+    public void download(String url, String path, ExecutorService executorService){
         //1.解析url，获取底下的目录、文件名
-        List<DownloadPair> downloadPairList = getDownloadPairs(url);
+        List<BatchDownloadMavenFiles.DownloadPair> downloadPairList = getDownloadPairs(url);
         if (downloadPairList == null){
             return;
         }
+
+
 
         //2.检查path，底下若有文件，删除
         checkPath(path);
 
         //3.循环子目，
         this.println(String.format("个数 %s", downloadPairList.size()));
-        for(DownloadPair downloadPair : downloadPairList){
+        for(BatchDownloadMavenFiles.DownloadPair downloadPair : downloadPairList){
 
 
             if(downloadPair.isFile()){
                 //3.1 若是文件，直接下载
-                this.println(String.format("       下载 %s     文件名 %s", downloadPair.getUrl(), downloadPair.getElement()));
+                this.println(String.format("       任务 %s     文件名 %s", downloadPair.getUrl(), downloadPair.getElement()));
                 this.println(String.format("       到   %s", path));
                 this.println("");
-                FileDownloadTool.download( downloadPair.getUrl(), path, downloadPair.getElement());
+
+                //下载方法，使用线程下载
+//                FileDownloadTool.download( downloadPair.getUrl(), path, downloadPair.getElement());
+                DownloadRunable downloadRunable = new DownloadRunable(downloadPair.getUrl(), path, downloadPair.getElement());
+                executorService.execute(downloadRunable);
+
+
             }else if(downloadPair.isPath()){
                 //3.2 若是文件夹，看本地是否有文件夹，没有则创建，建好后，递归本方法，url与path增加下级目录
                 String pathName = downloadPair.getElement();
@@ -73,10 +90,12 @@ public class DownloadMavenFiles {
                 this.println(String.format("到   %s", pathName));
                 this.println("");
 
-                this.download(downloadPair.getUrl(), pathName);
+                this.download(downloadPair.getUrl(), pathName, executorService);
 
             }
             //3.3底下无内容，则返回
+
+
         }
     }
 
@@ -90,6 +109,8 @@ public class DownloadMavenFiles {
             if(f.isFile()){
                 f.deleteOnExit();
             }
+
+            f.length();
         }
     }
 
@@ -98,7 +119,7 @@ public class DownloadMavenFiles {
      * @param url
      * @return
      */
-    private List<DownloadPair> getDownloadPairs(String url) {
+    private List<BatchDownloadMavenFiles.DownloadPair> getDownloadPairs(String url) {
         String html = "";
         try {
 
@@ -111,7 +132,7 @@ public class DownloadMavenFiles {
         if(StringUtil.isEmptyString(html)){
             return null;
         }
-        List<DownloadPair> downloadPairList = new ArrayList<>();
+        List<BatchDownloadMavenFiles.DownloadPair> downloadPairList = new ArrayList<>();
         Document doc = Jsoup.parse(html);
         Iterator<Element> i = doc.select("a").iterator();
         while (i.hasNext()){
@@ -123,7 +144,7 @@ public class DownloadMavenFiles {
                 continue;
             }
 
-            DownloadPair downloadPair = new DownloadPair();
+            BatchDownloadMavenFiles.DownloadPair downloadPair = new BatchDownloadMavenFiles.DownloadPair();
             downloadPair.setUrl(element.attr("href"));
             downloadPair.setElement(element.childNodes().get(0).toString());
             downloadPairList.add(downloadPair);
@@ -188,6 +209,8 @@ public class DownloadMavenFiles {
             return "PATH".equals(this.type);
         }
     }
+
+
 
 
 }

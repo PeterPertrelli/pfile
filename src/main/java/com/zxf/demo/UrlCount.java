@@ -15,6 +15,7 @@ public class UrlCount {
 
 
     private long maxDuration = -1;
+    private String maxDurationStr = null;
     private long minDuration = -1;
     private long eveDuration = -1;
 
@@ -38,6 +39,7 @@ public class UrlCount {
             if(duration != -1){
                 if(maxDuration == -1 || duration > maxDuration){
                     maxDuration = duration;
+                    maxDurationStr = d.getEndStr();
                 }
                 if(minDuration == -1 || duration < minDuration){
                     minDuration = duration;
@@ -48,8 +50,24 @@ public class UrlCount {
         eveDuration = all/durationList.size();
     }
 
+    public List<Duration> getDurationList() {
+        return durationList;
+    }
+
+    public Map<String, Duration> getDurationMap() {
+        return durationMap;
+    }
+
     public long getMaxDuration() {
         return maxDuration;
+    }
+
+    public String getMaxDurationStr() {
+        return maxDurationStr;
+    }
+
+    public void setMaxDurationStr(String maxDurationStr) {
+        this.maxDurationStr = maxDurationStr;
     }
 
     public long getMinDuration() {
@@ -81,6 +99,16 @@ public class UrlCount {
         private String trackNum;
         private Date startTime;
         private Date endTime;
+
+        private String endStr;
+
+        public String getEndStr() {
+            return endStr;
+        }
+
+        public void setEndStr(String endStr) {
+            this.endStr = endStr;
+        }
 
         public Date getStartTime() {
             return startTime;
